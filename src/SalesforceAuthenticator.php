@@ -4,6 +4,13 @@ namespace MyOutDesk\SalesforceRest;
 
 use GuzzleHttp\Exception\ClientException;
 
+/**
+ * Class SalesforceAuthenticator
+ *
+ * Wrapper class to hold configuration data and attempt authentication to Salesforce
+ *
+ * @package MyOutDesk\SalesforceRest
+ */
 class SalesforceAuthenticator {
 	private $client;
 	
@@ -24,28 +31,55 @@ class SalesforceAuthenticator {
 		}
 	}
 
+    /**
+     * Returns the instance URL to use for API calls
+     *
+     * @return mixed
+     */
 	public function getInstanceUrl()
 	{
 		return $this->instanceUrl;
 	}
 
+    /**
+     * Returns the token to attach to all API calls
+     *
+     * @return mixed
+     */
 	public function getToken()
 	{
 		return $this->accessToken;
 	}
 
+    /**
+     * Sets the key and secret of this application
+     *
+     * @param $consumerKey
+     * @param $consumerSecret
+     */
 	public function configureApp($consumerKey, $consumerSecret) 
 	{
 		$this->consumerKey = $consumerKey;
 		$this->consumerSecret = $consumerSecret;
 	}
 
+    /**
+     * Sets the user, specific to this authentication flow
+     *
+     * @param $username
+     * @param $password
+     */
 	public function configureUser($username, $password) 
 	{
 		$this->username = $username;
 		$this->password = $password;
 	}
 
+    /**
+     * Authenticates using the username \ password web server flow
+     *
+     * @return bool
+     */
 	public function authenticate()
 	{
 		try {
