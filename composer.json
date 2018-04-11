@@ -1,0 +1,25 @@
+{
+    "name": "MyOutDesk/SalesforceRest",
+    "authors": [
+        {
+            "name": "Jayson Lindsley",
+            "email": "jay.lindsley@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyOutDesk\\SalesforceRest\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MyOutDesk\\SalesforceRest\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
