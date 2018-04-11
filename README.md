@@ -33,6 +33,13 @@ $salesforceRest->create('Lead', [
 	'Company' => 'MyOutDesk, LLC'
 ]);
 ```
+### Read Record
+```php
+// Get all fields
+$salesforceRest->get('Lead', '00Q2F000002yJUk');
+// Get only specific fields
+$salesforceRest->get('Lead', '00Q2F000002yJUk', ['Phone', 'customfield__c', 'email']);
+```
 
 ### Update Record
 ```php
