@@ -14,7 +14,7 @@ composer myoutdeskllc/salesforcerest
 
 ### Usage
 ```php
-use SalesforceRest\SalesforceRest;
+use MyOutDesk\SalesforceRest\SalesforceClient;
 
 $salesforceRest = new SalesforceRest();
 $connected = $salesforceRest->connectApp(CONSUMER_KEY, CONSUMER_SECRET)
@@ -25,11 +25,26 @@ if($connected) {
 }
 ```
 
-### Record Creation
+### Create Record
 ```php
-	$salesforceRest->create('Lead', [
-		'FirstName' => 'Unit',
-		'LastName' => 'McTestFace',
-		'Company' => 'MyOutDesk, LLC'
-	]);
+$salesforceRest->create('Lead', [
+	'FirstName' => 'Unit',
+	'LastName' => 'McTestFace',
+	'Company' => 'MyOutDesk, LLC'
+]);
+```
+
+### Update Record
+```php
+$salesforceRest->update('Account', '0012F00000DQe3A', ['Phone' => '123-1234-123'])
+```
+
+### Delete Record
+```php
+$salesforceRest->delete('ManualTask__c', 'a1B2F000000BuCn');
+```
+
+### Search For Record
+```php
+$salesforceRest->search('FIND {unittest@mod.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)');
 ```
