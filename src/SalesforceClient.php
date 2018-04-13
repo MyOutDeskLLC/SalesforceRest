@@ -12,16 +12,16 @@ use GuzzleHttp\Client;
  * @package MyOutDesk\SalesforceRest
  */
 class SalesforceClient {
-	private $authenticator;
-	private $instanceUrl;
-	private $accessToken;
-	private $version;
+    private $authenticator;
+    private $instanceUrl;
+    private $accessToken;
+    private $version;
 
-	public function __construct(Client $client, $production = false, $version = 'v42.0') {
-		$this->client = $client;
-		$this->authenticator = new SalesforceAuthenticator($this->client, $production);
-		$this->version = $version;
-	}
+    public function __construct(Client $client, $production = false, $version = 'v42.0') {
+        $this->client = $client;
+        $this->authenticator = new SalesforceAuthenticator($this->client, $production);
+        $this->version = $version;
+    }
 
     /**
      * Which app to authenticate as in salesforce
@@ -30,11 +30,11 @@ class SalesforceClient {
      * @param $consumerSecret Given by Salesforce when adding an application
      * @return $this
      */
-	public function connectApp($consumerKey, $consumerSecret)
-	{
-		$this->authenticator->configureApp($consumerKey, $consumerSecret);
-		return $this;
-	}
+    public function connectApp($consumerKey, $consumerSecret)
+    {
+        $this->authenticator->configureApp($consumerKey, $consumerSecret);
+        return $this;
+    }
 
     /**
      * Authenticates as a given user. Use API user on production and your own user on sandbox
@@ -43,28 +43,28 @@ class SalesforceClient {
      * @param $password
      * @return $this
      */
-	public function asUser($username, $password)
-	{
-		$this->authenticator->configureUser($username, $password);
-		return $this;
-	}
+    public function asUser($username, $password)
+    {
+        $this->authenticator->configureUser($username, $password);
+        return $this;
+    }
 
     /**
      * Attempts to authenticate with the given app and user configuration
      *
      * @return bool
      */
-	public function authenticate()
-	{
-		$this->authenticator->authenticate();
-		$this->instanceUrl = $this->authenticator->getInstanceUrl();
-		$this->accessToken = $this->authenticator->getToken();
-		$this->instanceUrl .= '/services/data/' .$this->version. '/';
-		if(!isset($this->instanceUrl, $this->accessToken)) {
-			return false;
-		}
-		return true;
-	}
+    public function authenticate()
+    {
+        $this->authenticator->authenticate();
+        $this->instanceUrl = $this->authenticator->getInstanceUrl();
+        $this->accessToken = $this->authenticator->getToken();
+        $this->instanceUrl .= '/services/data/' .$this->version. '/';
+        if(!isset($this->instanceUrl, $this->accessToken)) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Searches salesforce using the given string format:
@@ -74,19 +74,19 @@ class SalesforceClient {
      * @param $query
      * @return mixed
      */
-	public function search($query)
-	{
-		$response = $this->client->request('GET', $this->instanceUrl . 'search/', [
-			'headers' => [
-			    'Authorization' => "Bearer $this->accessToken",
-			    'Content-Type' => 'application/json'
-			], 
-			'query' => [
-				'q' => $query
-			]
-		]);
-		return json_decode((string)$response->getBody(), true);
-	}
+    public function search($query)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . 'search/', [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'query' => [
+                'q' => $query
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
 
     /**
      * Returns a record from salesforce if it exists
@@ -96,17 +96,17 @@ class SalesforceClient {
      * @param array $fields optional, if you want only specific fields
      * @return mixed
      */
-	public function get($object, $id, array $fields = [])
-	{
-		$allFields = implode($fields, ",");
-		$response = $this->client->request('GET', $this->instanceUrl . "sobjects/$object/$id" . ((!empty($fields)) ? "?fields=$allFields" : ""), [
-			'headers' => [
-			    'Authorization' => "Bearer $this->accessToken",
-			    'Content-Type' => 'application/json'
-			]
-		]);
-		return json_decode((string)$response->getBody(), true);
-	}
+    public function get($object, $id, array $fields = [])
+    {
+        $allFields = implode($fields, ",");
+        $response = $this->client->request('GET', $this->instanceUrl . "sobjects/$object/$id" . ((!empty($fields)) ? "?fields=$allFields" : ""), [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
 
     /**
      * Creates a record type with the properties given
@@ -115,17 +115,17 @@ class SalesforceClient {
      * @param $properties key value pairs for the object
      * @return mixed
      */
-	public function create($object, $properties)
-	{
-		$response = $this->client->request('POST', $this->instanceUrl . "sobjects/$object", [
-			'headers' => [
-			    'Authorization' => "Bearer $this->accessToken",
-			    'Content-Type' => 'application/json'
-			],
-			'json' => $properties
-		]);
-		return json_decode((string)$response->getBody(), true);
-	}
+    public function create($object, $properties)
+    {
+        $response = $this->client->request('POST', $this->instanceUrl . "sobjects/$object", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => $properties
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
 
     /**
      * Updates a given record with the new properties specified
@@ -135,17 +135,17 @@ class SalesforceClient {
      * @param $properties
      * @return bool true if successful, false if not
      */
-	public function update($object, $id, $properties)
-	{
-		$response = $this->client->request('PATCH', $this->instanceUrl . "sobjects/$object/$id", [
-			'headers' => [
-			    'Authorization' => "Bearer $this->accessToken",
-			    'Content-Type' => 'application/json'
-			],
-			'json' => $properties
-		]);
-		return ($response->getStatusCode() === 204);
-	}
+    public function update($object, $id, $properties)
+    {
+        $response = $this->client->request('PATCH', $this->instanceUrl . "sobjects/$object/$id", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => $properties
+        ]);
+        return ($response->getStatusCode() === 204);
+    }
 
     /**
      * Deletes the given object type with the given ID
@@ -154,16 +154,16 @@ class SalesforceClient {
      * @param $id
      * @return bool true if successful, false if not
      */
-	public function delete($object, $id)
-	{
-		$response = $this->client->request('DELETE', $this->instanceUrl . "sobjects/$object/$id", [
-			'headers' => [
-			    'Authorization' => "Bearer $this->accessToken",
-			    'Content-Type' => 'application/json'
-			]
-		]);
-		return ($response->getStatusCode() === 204);
-	}
+    public function delete($object, $id)
+    {
+        $response = $this->client->request('DELETE', $this->instanceUrl . "sobjects/$object/$id", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return ($response->getStatusCode() === 204);
+    }
 
     /**
      * Gets the records for a given object type (requires Ids, fields)
@@ -198,7 +198,7 @@ class SalesforceClient {
      * @param array $collection records to insert
      * @return bool
      */
-	public function insertCollection($object, array $collection)
+    public function insertCollection($object, array $collection)
     {
         $processedCollection = [];
         foreach($collection as $item) {
@@ -206,7 +206,7 @@ class SalesforceClient {
         }
         $response = $this->client->request('POST', $this->instanceUrl . 'composite/sobjects', [
             'headers' => [
-                'Authorization' => "Bearer $this->accessToken",
+                'Authorization' => "Be'' => '',arer $this->accessToken",
                 'Content-Type' => 'application/json'
             ],
             'json' => [
@@ -273,7 +273,7 @@ class SalesforceClient {
      * @param $operation
      * @return mixed
      */
-	public function createJob($object, $contentType, $operation)
+    public function createJob($object, $contentType, $operation)
     {
         $response = $this->client->request('POST', $this->instanceUrl . "jobs/ingest", [
             'headers' => [
