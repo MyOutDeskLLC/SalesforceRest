@@ -3,7 +3,6 @@
 namespace MyOutDesk\SalesforceRest;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 
 /**
  * Class SalesforceClient
