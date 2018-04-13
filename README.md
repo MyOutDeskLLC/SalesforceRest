@@ -37,8 +37,9 @@ $salesforceRest->create('Lead', [
 ```
 
 ### Create Multiple Records
-API version 42.0 required. Supports up to 200 records at a time.
+Supports up to 200 records at a time.
 ```php
+// Requires api 42.0
 $leadOne = [
     'firstName' => 'Test',
     'lastName' => 'McTestFace',
@@ -54,7 +55,7 @@ $leadTwo = [
 $salesforceRest->insertCollection('Lead', [$leadOne, $leadTwo]);    
 ```
 
-### Read Record
+### Get Record
 ```php
 // Get all fields
 $salesforceRest->get('Lead', '00Q2F000002yJUk');
@@ -62,14 +63,44 @@ $salesforceRest->get('Lead', '00Q2F000002yJUk');
 $salesforceRest->get('Lead', '00Q2F000002yJUk', ['Phone', 'customfield__c', 'email']);
 ```
 
+### Get Multiple Records
+```php
+// Requires api 42.0
+$salesforceRest->getCollection('Lead', [ID, ANOTHER_ID], ['firstName', 'lastName']);
+```
+
 ### Update Record
 ```php
 $salesforceRest->update('Account', '0012F00000DQe3A', ['Phone' => '123-1234-123'])
 ```
 
+### Update Multiple Records
+```php
+// Requires api 42.0
+$leadOne = [
+    'id' => ID,
+    'firstName' => 'LEAD ONE',
+    // other fields here
+];
+
+$leadTwo = [
+    'id' => ANOTHER_ID,
+    'firstName' => 'LEAD TWO',
+    // other fields here
+];
+
+$salesforceRest->updateCollection('Lead', [ $leadOne, $leadTwo ]);
+```
+
 ### Delete Record
 ```php
 $salesforceRest->delete('ManualTask__c', 'a1B2F000000BuCn');
+```
+
+### Delete Multiple Records
+```php
+// Requires api 42.0
+$salesforceRest->deleteCollection([ID, ANOTHER_ID]);
 ```
 
 ### Search For Record
