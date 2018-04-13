@@ -1,11 +1,11 @@
 ### Salesforce Rest API Example
-Contains code for basic rest API implementation in php
+Contains code for basic rest API implementation in php using username\password flow for API only account.
 
 ### Salesforce Setup
 1. Salesforce Sandbox -> Setup -> Create -> Apps
 2. Create new custom app with Oauth Enabled & Device Flow Enabled
 3. Copy the Consumer Key & Consumer Secret
-4. Login using your user or the API user
+4. Login using API only user
 
 ### Installation
 ```

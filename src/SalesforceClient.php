@@ -15,12 +15,12 @@ class SalesforceClient {
 	private $authenticator;
 	private $instanceUrl;
 	private $accessToken;
+	private $version;
 
-	const API_VERSION = "v42.0";
-
-	public function __construct(Client $client, $production = false) {
+	public function __construct(Client $client, $production = false, $version = 'v42.0') {
 		$this->client = $client;
 		$this->authenticator = new SalesforceAuthenticator($this->client, $production);
+		$this->version = $version;
 	}
 
     /**
@@ -59,7 +59,7 @@ class SalesforceClient {
 		$this->authenticator->authenticate();
 		$this->instanceUrl = $this->authenticator->getInstanceUrl();
 		$this->accessToken = $this->authenticator->getToken();
-		$this->instanceUrl .= '/services/data/' .self::API_VERSION. '/';
+		$this->instanceUrl .= '/services/data/' .$this->version. '/';
 		if(!isset($this->instanceUrl, $this->accessToken)) {
 			return false;
 		}
@@ -76,7 +76,7 @@ class SalesforceClient {
      */
 	public function search($query)
 	{
-		$response = $this->client->request('GET', $this->instanceUrl . "search/", [
+		$response = $this->client->request('GET', $this->instanceUrl . 'search/', [
 			'headers' => [
 			    'Authorization' => "Bearer $this->accessToken",
 			    'Content-Type' => 'application/json'
@@ -166,6 +166,32 @@ class SalesforceClient {
 	}
 
     /**
+     * Gets the records for a given object type (requires Ids, fields)
+     *
+     * @param $object
+     * @param array $ids
+     * @param array $fields
+     * @return mixed
+     */
+    public function getCollection($object, array $ids, array $fields)
+    {
+        $allIds = implode($ids, ',');
+        $allFields = implode($fields, ',');
+
+        $response = $this->client->request('GET', $this->instanceUrl . "composite/sobjects/$object", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'query' => [
+                'ids' => $allIds,
+                'fields' => $allFields
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
      * Inserts multiple records at once, using the given object type
      *
      * @param $object object to insert (Lead, Account, Etc)
@@ -186,6 +212,54 @@ class SalesforceClient {
             'json' => [
                 'allOrNone' => true,
                 'records' => $processedCollection
+            ]
+        ]);
+        return ($response->getStatusCode() === 200);
+    }
+
+    /**
+     * Updates multiple records at once, using the given object type
+     * Make sure your objects have ID's in the properties
+     *
+     * @param $object
+     * @param array $collection
+     * @return bool
+     */
+    public function updateCollection($object, array $collection)
+    {
+        $processedCollection = [];
+        foreach($collection as $item) {
+            $processedCollection[] = array_merge(['attributes' => ['type' => $object]], $item);
+        }
+        $response = $this->client->request('PATCH', $this->instanceUrl . 'composite/sobjects', [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'allOrNone' => true,
+                'records' => $processedCollection
+            ]
+        ]);
+        return ($response->getStatusCode() === 200);
+    }
+
+    /**
+     * Deletes records with the given Ids
+     *
+     * @param $ids
+     * @return bool
+     */
+    public function deleteCollection($ids)
+    {
+        $allIds = implode($ids, ',');
+        $response = $this->client->request('DELETE', $this->instanceUrl . 'composite/sobjects', [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'query' => [
+                'ids' => $allIds
             ]
         ]);
         return ($response->getStatusCode() === 200);
@@ -239,7 +313,7 @@ class SalesforceClient {
      */
     public function getAllJobStatus()
     {
-        $response = $this->client->request('GET', $this->instanceUrl . "jobs/ingest", [
+        $response = $this->client->request('GET', $this->instanceUrl . 'jobs/ingest', [
             'headers' => [
                 'Authorization' => "Bearer $this->accessToken",
                 'Content-Type' => 'application/json'
