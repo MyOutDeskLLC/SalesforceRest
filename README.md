@@ -13,10 +13,12 @@ composer myoutdeskllc/salesforcerest
 ```
 
 ### Usage
+Default API version is 42.0, production is off by default. Your wrapper can be tested using [a mock handler](http://docs.guzzlephp.org/en/stable/testing.html).
+
 ```php
 use MyOutDesk\SalesforceRest\SalesforceClient;
 
-$salesforceRest = new SalesforceRest();
+$salesforceRest = new SalesforceRest(new \GuzzleHttp\Client());
 $connected = $salesforceRest->connectApp(CONSUMER_KEY, CONSUMER_SECRET)
 				->asUser(SALESFORCE_USER, SALESFORCE_PASSWORD)
 				->authenticate();
