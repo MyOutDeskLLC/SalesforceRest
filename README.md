@@ -30,9 +30,9 @@ if($connected) {
 #### Create Record
 ```php
 $salesforceRest->create('Lead', [
-	'FirstName' => 'Unit',
-	'LastName' => 'McTestFace',
-	'Company' => 'MyOutDesk, LLC'
+	'FirstName' => 'John',
+	'LastName' => 'Smith',
+	'Company' => 'Company Name, LLC'
 ]);
 ```
 
@@ -40,15 +40,15 @@ $salesforceRest->create('Lead', [
 ```php
 // Requires api 42.0
 $leadOne = [
-    'firstName' => 'Test',
-    'lastName' => 'McTestFace',
-    'Company' => 'MyOutDesk, LLC'
+    'firstName' => 'John',
+    'lastName' => 'Smith',
+    'Company' => 'Company Name, LLC'
 ];
 
 $leadTwo = [
-    'firstName' => 'TestTwo',
-    'lastName' => 'McAlsoTestFace',
-    'Company' => 'MyOutDesk, LLC'
+    'firstName' => 'Alex',
+    'lastName' => 'Smith',
+    'Company' => 'Company Name, LLC'
 ];
 
 $salesforceRest->insertCollection('Lead', [$leadOne, $leadTwo]);    
@@ -104,5 +104,5 @@ $salesforceRest->deleteCollection([ID, ANOTHER_ID]);
 
 #### Search For Record
 ```php
-$salesforceRest->search('FIND {unittest@mod.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)');
+$salesforceRest->search('FIND {email@email.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)');
 ```
