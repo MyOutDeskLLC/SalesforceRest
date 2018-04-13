@@ -206,7 +206,7 @@ class SalesforceClient {
         }
         $response = $this->client->request('POST', $this->instanceUrl . 'composite/sobjects', [
             'headers' => [
-                'Authorization' => "Be'' => '',arer $this->accessToken",
+                'Authorization' => "Bearer $this->accessToken",
                 'Content-Type' => 'application/json'
             ],
             'json' => [
