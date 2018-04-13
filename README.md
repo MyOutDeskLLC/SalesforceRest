@@ -7,12 +7,12 @@ Contains code for basic rest API implementation in php using username\password f
 3. Copy the Consumer Key & Consumer Secret
 4. Login using API only user
 
-### Installation
+#### Installation
 ```
 composer myoutdeskllc/salesforcerest
 ```
 
-### Usage
+#### Usage
 Default API version is 42.0, production is off by default. Your wrapper can be tested using [a mock handler](http://docs.guzzlephp.org/en/stable/testing.html).
 
 ```php
@@ -27,7 +27,7 @@ if($connected) {
 }
 ```
 
-### Create Record
+#### Create Record
 ```php
 $salesforceRest->create('Lead', [
 	'FirstName' => 'Unit',
@@ -36,8 +36,7 @@ $salesforceRest->create('Lead', [
 ]);
 ```
 
-### Create Multiple Records
-Supports up to 200 records at a time.
+#### Create Multiple Records
 ```php
 // Requires api 42.0
 $leadOne = [
@@ -55,26 +54,26 @@ $leadTwo = [
 $salesforceRest->insertCollection('Lead', [$leadOne, $leadTwo]);    
 ```
 
-### Get Record
+#### Get Record
 ```php
 // Get all fields
-$salesforceRest->get('Lead', '00Q2F000002yJUk');
+$salesforceRest->get('Lead', ID);
 // Get only specific fields
-$salesforceRest->get('Lead', '00Q2F000002yJUk', ['Phone', 'customfield__c', 'email']);
+$salesforceRest->get('Lead', ID, ['Phone', 'customfield__c', 'email']);
 ```
 
-### Get Multiple Records
+#### Get Multiple Records
 ```php
 // Requires api 42.0
 $salesforceRest->getCollection('Lead', [ID, ANOTHER_ID], ['firstName', 'lastName']);
 ```
 
-### Update Record
+#### Update Record
 ```php
-$salesforceRest->update('Account', '0012F00000DQe3A', ['Phone' => '123-1234-123'])
+$salesforceRest->update('Account', ID, ['Phone' => '123-1234-123'])
 ```
 
-### Update Multiple Records
+#### Update Multiple Records
 ```php
 // Requires api 42.0
 $leadOne = [
@@ -92,18 +91,18 @@ $leadTwo = [
 $salesforceRest->updateCollection('Lead', [ $leadOne, $leadTwo ]);
 ```
 
-### Delete Record
+#### Delete Record
 ```php
-$salesforceRest->delete('ManualTask__c', 'a1B2F000000BuCn');
+$salesforceRest->delete('Lead', ID);
 ```
 
-### Delete Multiple Records
+#### Delete Multiple Records
 ```php
 // Requires api 42.0
 $salesforceRest->deleteCollection([ID, ANOTHER_ID]);
 ```
 
-### Search For Record
+#### Search For Record
 ```php
 $salesforceRest->search('FIND {unittest@mod.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)');
 ```
