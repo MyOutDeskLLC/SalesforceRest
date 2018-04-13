@@ -3,6 +3,7 @@
 namespace MyOutDesk\SalesforceRest;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Class SalesforceClient
@@ -15,6 +16,8 @@ class SalesforceClient {
 	private $authenticator;
 	private $instanceUrl;
 	private $accessToken;
+
+	const API_VERSION = "v42.0";
 
 	public function __construct(Client $client, $production = false) {
 		$this->client = $client;
@@ -57,7 +60,7 @@ class SalesforceClient {
 		$this->authenticator->authenticate();
 		$this->instanceUrl = $this->authenticator->getInstanceUrl();
 		$this->accessToken = $this->authenticator->getToken();
-		$this->instanceUrl .= "/services/data/v20.0/";
+		$this->instanceUrl .= '/services/data/' .self::API_VERSION. '/';
 		if(!isset($this->instanceUrl, $this->accessToken)) {
 			return false;
 		}
@@ -162,4 +165,127 @@ class SalesforceClient {
 		]);
 		return ($response->getStatusCode() === 204);
 	}
+
+    /**
+     * Inserts multiple records at once, using the given object type
+     *
+     * @param $object object to insert (Lead, Account, Etc)
+     * @param array $collection records to insert
+     * @return bool
+     */
+	public function insertCollection($object, array $collection)
+    {
+        $processedCollection = [];
+        foreach($collection as $item) {
+            $processedCollection[] = array_merge(['attributes' => ['type' => $object]], $item);
+        }
+        $response = $this->client->request('POST', $this->instanceUrl . 'composite/sobjects', [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'allOrNone' => true,
+                'records' => $processedCollection
+            ]
+        ]);
+        return ($response->getStatusCode() === 200);
+    }
+
+    /**
+     * Creates a bulk API job
+     *
+     * @param $object
+     * @param $contentType
+     * @param $operation
+     * @return mixed
+     */
+	public function createJob($object, $contentType, $operation)
+    {
+        $response = $this->client->request('POST', $this->instanceUrl . "jobs/ingest", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'object' => $object,
+                'contentType' => $contentType,
+                'operation' => $operation
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Gets the status of an existing bulk API job
+     *
+     * @param $jobId
+     * @return mixed
+     */
+    public function getJobStatus($jobId)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . "jobs/ingest/$jobId", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Gets all job statuses
+     *
+     * @return mixed
+     */
+    public function getAllJobStatus()
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . "jobs/ingest", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Aborts the given job
+     *
+     * @param $jobId
+     * @return mixed
+     */
+    public function abortJob($jobId)
+    {
+        $response = $this->client->request('PATCH', $this->instanceUrl . "jobs/ingest/$jobId", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'state' => 'Aborted'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Closes the given job, allowing it to process
+     *
+     * @param $jobId
+     * @return mixed
+     */
+    public function closeJob($jobId)
+    {
+        $response = $this->client->request('PATCH', $this->instanceUrl . "jobs/ingest/$jobId", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'json' => [
+                'state' => 'UploadComplete'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
 }

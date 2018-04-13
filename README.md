@@ -33,6 +33,25 @@ $salesforceRest->create('Lead', [
 	'Company' => 'MyOutDesk, LLC'
 ]);
 ```
+
+### Create Multiple Records
+API version 42.0 required. Supports up to 200 records at a time.
+```php
+$leadOne = [
+    'firstName' => 'Test',
+    'lastName' => 'McTestFace',
+    'Company' => 'MyOutDesk, LLC'
+];
+
+$leadTwo = [
+    'firstName' => 'TestTwo',
+    'lastName' => 'McAlsoTestFace',
+    'Company' => 'MyOutDesk, LLC'
+];
+
+$salesforceRest->insertCollection('Lead', [$leadOne, $leadTwo]);    
+```
+
 ### Read Record
 ```php
 // Get all fields
