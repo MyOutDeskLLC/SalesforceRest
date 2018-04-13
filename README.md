@@ -9,7 +9,7 @@ Contains code for basic rest API implementation in php using username\password f
 
 #### Installation
 ```
-composer myoutdeskllc/salesforcerest
+composer require myoutdesk/salesforcerest
 ```
 
 #### Usage
