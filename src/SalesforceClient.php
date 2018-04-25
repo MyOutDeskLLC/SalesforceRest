@@ -89,6 +89,28 @@ class SalesforceClient {
     }
 
     /**
+     * Searches salesforce using a given SOQL string
+     * 
+     * SELECT Id FROM Opportunity WHERE AccountId = \'AccountIdHere\'
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function query($query)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . 'query/', [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ],
+            'query' => [
+                'q' => $query
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
      * Returns a record from salesforce if it exists
      *
      * @param $object the type of object (Lead, Account, Opportunity, etc)
