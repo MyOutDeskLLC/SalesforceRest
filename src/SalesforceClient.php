@@ -383,4 +383,99 @@ class SalesforceClient {
         ]);
         return json_decode((string)$response->getBody(), true);
     }
+
+    /**
+     * Returns metadata about a given report
+     * 
+     * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/sforce_analytics_rest_api_get_reportmetadata.htm
+     * 
+     * @param $id salesforce ID of the report
+     * @return mixed
+     */
+    public function getReportMetadata($id)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . "analytics/reports/$id/describe", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Deletes the report by the given ID (must not be in use by a dashboard)
+     * 
+     * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/sforce_analytics_rest_api_delete_report.htm
+     * 
+     * @param $id salesforce id of the report 
+     * @return boolean
+     */
+    public function deleteReport($id) 
+    {
+        $response = $this->client->request('DELETE', $this->instanceUrl . "analytics/reports/$id", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return ($response->getStatusCode() === 204);
+    }
+
+    /**
+     * Gets metadata for the given dashboard
+     * 
+     * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_example_get_dashboard_metadata.htm
+     * 
+     * @param $id salesforce id of the dashboard
+     * @return mixed
+     */
+    public function getDashboardMetadata($id)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . "analytics/dashboards/$id/describe", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Gets the given dashboard results
+     * 
+     * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_get_results.htm
+     * 
+     * @param $id salesforce id of the dashboard
+     * @return mixed
+     */
+    public function getDashboardResults($id)
+    {
+        $response = $this->client->request('GET', $this->instanceUrl . "analytics/dashboards/$id", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return json_decode((string)$response->getBody(), true);
+    }
+
+    /**
+     * Deletes the given dashboard
+     * 
+     * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_delete.htm
+     * 
+     * @param $id salesforce id of the dashboard
+     * @return boolean
+     */
+    public function deleteDashboard($id)
+    {
+        $response = $this->client->request('DELETE', $this->instanceUrl . "analytics/dashboards/$id", [
+            'headers' => [
+                'Authorization' => "Bearer $this->accessToken",
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+        return ($response->getStatusCode() === 204);
+    }
 }
