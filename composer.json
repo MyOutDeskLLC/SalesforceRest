@@ -7,9 +7,6 @@
             "email": "modit@myoutdesk.com"
         }
     ],
-    "require": {
-        "guzzlehttp/guzzle": "^6.3"
-    },
     "autoload": {
         "psr-4": {
             "MyOutDesk\\SalesforceRest\\": "src"
@@ -22,5 +19,8 @@
     },
     "scripts": {
         "test": "phpunit"
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.4"
     }
 }
