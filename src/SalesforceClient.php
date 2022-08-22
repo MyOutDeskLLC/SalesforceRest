@@ -101,7 +101,7 @@ class SalesforceClient {
     /**
      * Returns the instance url, if set
      *
-     * @return void
+     * @return mixed
      */
     public function getInstanceUrl()
     {
