@@ -89,6 +89,39 @@ class SalesforceClient {
     }
 
     /**
+     * Returns the access token, if set
+     *
+     * @return mixed
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * Returns the instance url, if set
+     *
+     * @return void
+     */
+    public function getInstanceUrl()
+    {
+        return $this->instanceUrl;
+    }
+
+    /**
+     * Restores a state, potentially from cached credentials
+     *
+     * @param $accessToken
+     * @param $instanceUrl
+     * @return void
+     */
+    public function restore($accessToken, $instanceUrl)
+    {
+        $this->accessToken = $accessToken;
+        $this->instanceUrl = $instanceUrl;
+    }
+
+    /**
      * Searches salesforce using the given string format:
      *
      * FIND {test@mod.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)
