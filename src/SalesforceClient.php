@@ -67,6 +67,28 @@ class SalesforceClient {
     }
 
     /**
+     * Sets the instance url
+     *
+     * @param $instanceUrl
+     * @return void
+     */
+    public function setInstanceUrl($instanceUrl)
+    {
+        $this->instanceUrl = $instanceUrl;
+    }
+
+    /**
+     * Sets the access token to enable outside caching of credentials for certain time periods
+     *
+     * @param $accessToken
+     * @return void
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    /**
      * Searches salesforce using the given string format:
      *
      * FIND {test@mod.com} IN ALL FIELDS RETURNING Lead(Id, Name, Email)
