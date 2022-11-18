@@ -175,7 +175,7 @@ class SalesforceClient {
      */
     public function get($object, $id, array $fields = [])
     {
-        $allFields = implode($fields, ",");
+        $allFields = implode(",", $fields);
         $response = $this->client->request('GET', $this->instanceUrl . "sobjects/$object/$id" . ((!empty($fields)) ? "?fields=$allFields" : ""), [
             'headers' => [
                 'Authorization' => "Bearer $this->accessToken",
@@ -252,8 +252,8 @@ class SalesforceClient {
      */
     public function getCollection($object, array $ids, array $fields)
     {
-        $allIds = implode($ids, ',');
-        $allFields = implode($fields, ',');
+        $allIds = implode(',', $ids);
+        $allFields = implode(',', $fields);
 
         $response = $this->client->request('GET', $this->instanceUrl . "composite/sobjects/$object", [
             'headers' => [
@@ -329,7 +329,7 @@ class SalesforceClient {
      */
     public function deleteCollection($ids)
     {
-        $allIds = implode($ids, ',');
+        $allIds = implode(',', $ids);
         $response = $this->client->request('DELETE', $this->instanceUrl . 'composite/sobjects', [
             'headers' => [
                 'Authorization' => "Bearer $this->accessToken",
