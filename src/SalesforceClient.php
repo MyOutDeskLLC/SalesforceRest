@@ -26,8 +26,8 @@ class SalesforceClient {
     /**
      * Which app to authenticate as in salesforce
      *
-     * @param $consumerKey Given by Salesforce when adding an application
-     * @param $consumerSecret Given by Salesforce when adding an application
+     * @param string $consumerKey Given by Salesforce when adding an application
+     * @param string $consumerSecret Given by Salesforce when adding an application
      * @return $this
      */
     public function connectApp($consumerKey, $consumerSecret)
@@ -39,8 +39,8 @@ class SalesforceClient {
     /**
      * Authenticates as a given user. Use API user on production and your own user on sandbox
      *
-     * @param $username
-     * @param $password
+     * @param string $username
+     * @param string $password
      * @return $this
      */
     public function asUser($username, $password)
@@ -69,7 +69,7 @@ class SalesforceClient {
     /**
      * Sets the instance url
      *
-     * @param $instanceUrl
+     * @param string $instanceUrl
      * @return void
      */
     public function setInstanceUrl($instanceUrl)
@@ -80,7 +80,7 @@ class SalesforceClient {
     /**
      * Sets the access token to enable outside caching of credentials for certain time periods
      *
-     * @param $accessToken
+     * @param string $accessToken
      * @return void
      */
     public function setAccessToken($accessToken)
@@ -111,8 +111,8 @@ class SalesforceClient {
     /**
      * Restores a state, potentially from cached credentials
      *
-     * @param $accessToken
-     * @param $instanceUrl
+     * @param string $accessToken
+     * @param string $instanceUrl
      * @return void
      */
     public function restore($accessToken, $instanceUrl)
@@ -148,7 +148,7 @@ class SalesforceClient {
      * 
      * SELECT Id FROM Opportunity WHERE AccountId = \'AccountIdHere\'
      *
-     * @param $query
+     * @param string $query
      * @return mixed
      */
     public function query($query)
@@ -168,8 +168,8 @@ class SalesforceClient {
     /**
      * Returns a record from salesforce if it exists
      *
-     * @param $object the type of object (Lead, Account, Opportunity, etc)
-     * @param $id the salesforce ID
+     * @param string $object the type of object (Lead, Account, Opportunity, etc)
+     * @param string $id salesforce ID
      * @param array $fields optional, if you want only specific fields
      * @return mixed
      */
@@ -188,8 +188,8 @@ class SalesforceClient {
     /**
      * Creates a record type with the properties given
      *
-     * @param $object Type of object
-     * @param $properties key value pairs for the object
+     * @param string $object Type of object
+     * @param array $properties key value pairs for the object
      * @return mixed
      */
     public function create($object, $properties)
@@ -271,7 +271,7 @@ class SalesforceClient {
     /**
      * Inserts multiple records at once, using the given object type
      *
-     * @param $object object to insert (Lead, Account, Etc)
+     * @param string $object to insert (Lead, Account, Etc)
      * @param array $collection records to insert
      * @return bool
      */
@@ -298,7 +298,7 @@ class SalesforceClient {
      * Updates multiple records at once, using the given object type
      * Make sure your objects have ID's in the properties
      *
-     * @param $object
+     * @param string $object
      * @param array $collection
      * @return bool
      */
@@ -324,7 +324,7 @@ class SalesforceClient {
     /**
      * Deletes records with the given Ids
      *
-     * @param $ids
+     * @param array $ids
      * @return bool
      */
     public function deleteCollection($ids)
@@ -444,7 +444,7 @@ class SalesforceClient {
      * 
      * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/sforce_analytics_rest_api_get_reportmetadata.htm
      * 
-     * @param $id salesforce ID of the report
+     * @param string $id ID of the report
      * @return mixed
      */
     public function getReportMetadata($id)
@@ -463,7 +463,7 @@ class SalesforceClient {
      * 
      * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/sforce_analytics_rest_api_delete_report.htm
      * 
-     * @param $id salesforce id of the report 
+     * @param string $id id of the report
      * @return boolean
      */
     public function deleteReport($id) 
@@ -482,7 +482,7 @@ class SalesforceClient {
      * 
      * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_example_get_dashboard_metadata.htm
      * 
-     * @param $id salesforce id of the dashboard
+     * @param string $id id of the dashboard
      * @return mixed
      */
     public function getDashboardMetadata($id)
@@ -501,7 +501,7 @@ class SalesforceClient {
      * 
      * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_get_results.htm
      * 
-     * @param $id salesforce id of the dashboard
+     * @param string $id id of the dashboard
      * @return mixed
      */
     public function getDashboardResults($id)
@@ -520,7 +520,7 @@ class SalesforceClient {
      * 
      * @see https://developer.salesforce.com/docs/atlas.en-us.api_analytics.meta/api_analytics/analytics_api_dashboard_delete.htm
      * 
-     * @param $id salesforce id of the dashboard
+     * @param string $id id of the dashboard
      * @return boolean
      */
     public function deleteDashboard($id)
