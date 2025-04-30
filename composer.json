@@ -21,6 +21,6 @@
         "test": "phpunit"
     },
     "require": {
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.0"
     }
 }
